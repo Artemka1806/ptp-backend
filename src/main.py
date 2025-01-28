@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from .models import ALL_DB_MODELS
-from .routers import ALL_ROUTERS
-from .utils import init_db
+from src.models import ALL_DB_MODELS
+from src.routers import ALL_ROUTERS
+from src.utils import init_db
 
 
 @asynccontextmanager

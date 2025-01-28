@@ -35,7 +35,7 @@ class User(Document):
         return {**self.model_dump(), "id": str(self.id)}
     
     async def get_plants(self):
-        from models import Plant
+        from src.models import Plant
         return await Plant.get_by_owner(self.id)
 
     def generate_token(self):

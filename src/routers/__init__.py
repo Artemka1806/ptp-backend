@@ -1,12 +1,9 @@
 __all__ = [
-    "plant_router",
-    "user_router",
+    'ALL_ROUTERS'
 ]
 
-from .plant import router as plant_router
-from .user import router as user_router
+from .v1 import ALL_ROUTERS as v1_routers
 
-ALL_ROUTERS = [
-    plant_router,
-    user_router
+ALL_ROUTERS = [ 
+    *v1_routers 
 ]

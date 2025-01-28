@@ -6,7 +6,7 @@ security = HTTPBearer()
 async def current_user(
     auth: HTTPAuthorizationCredentials = Security(security)
 ):
-    from models import User
+    from src.models import User
     
     if not auth:
         raise HTTPException(401, "No authorization credentials found")
