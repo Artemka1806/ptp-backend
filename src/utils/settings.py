@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     MONGO_DB_URI: str = "mongodb://localhost:27017"
     MONGO_DB_NAME: str = "db"
     JWT_SECRET: str = "secret"
+    JWT_EXPIRATION: int = 120
 
 
 settings = Settings()
