@@ -9,9 +9,7 @@ router = APIRouter(tags=["plant"], prefix="/v1/plant")
 @router.post("")
 async def create_plant(body: PlantCreate, user: User = Depends(current_user)):
     """Create a new plant"""
-    plant = Plant(**body.model_dump(), owner_id=user.id)
-    await plant.insert()
-    return plant.dump()
+    return await Plant.create(body, user.id)
 
 
 @router.get("/{code}")
@@ -25,6 +23,4 @@ async def get_plant_by_code(code: str):
 async def update_plant_by_code(code: str, body: PlantStatistics):
     """Update a plant's statistics by its code"""
     plant = await Plant.get_by_code(code)
-    plant.statistics = body
-    await plant.save()
-    return plant.dump()
+    return await plant.update_statistics(body)
