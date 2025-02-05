@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from beanie import Document, PydanticObjectId
 from pydantic import BaseModel
@@ -9,10 +10,18 @@ class PlantCreate(BaseModel):
     code: str
 
 
+class PlantStatistics(BaseModel):
+    temperature: Optional[str] = None
+    humidity: Optional[str] = None
+    soil_moisture: Optional[str] = None
+    light_level: Optional[str] = None
+
+
 class Plant(Document):
     name: str
     code: str
     owner_id: PydanticObjectId
+    statistics: Optional[PlantStatistics] = None
     created_at: datetime = datetime.utcnow()
 
     @classmethod
