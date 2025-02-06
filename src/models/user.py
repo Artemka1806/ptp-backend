@@ -28,6 +28,17 @@ class User(Document):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     @classmethod
+    async def create(cls, email: str, name: str, hashed_password: str):
+        user = await cls.get_by_email(email)
+        if user:
+            return None
+        return await cls.insert_one(cls(email=email, name=name, hashed_password=hashed_password))
+    
+    @classmethod
+    async def get_by_id(cls, id: int):
+        return await cls.find_one(cls.id == id)
+
+    @classmethod
     async def get_by_email(cls, email: str):
         return await cls.find_one(cls.email == email)
 
