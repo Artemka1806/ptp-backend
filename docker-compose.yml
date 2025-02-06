@@ -11,3 +11,15 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongodb-data:
