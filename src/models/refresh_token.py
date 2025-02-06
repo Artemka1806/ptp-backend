@@ -13,6 +13,15 @@ class RefreshToken(Document):
         return {**self.model_dump(), "id": str(self.id), "user_id": str(self.user_id)}
 
     @classmethod
+    async def create(cls, user_id: PydanticObjectId):
+        return await cls.insert_one(
+            cls(
+                user_id=user_id,
+                expires_at=datetime.utcnow() + timedelta(days=30)
+            )
+        )
+
+    @classmethod
     async def get_by_token(cls, token: str):
         return await cls.find_one({"_id": PydanticObjectId(token)})
     

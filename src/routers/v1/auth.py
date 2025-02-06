@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Cookie, HTTPException, Response
 from passlib.hash import bcrypt
 
-from src.models import UserCreate, UserAuth, RefreshToken
-from src.services import user_service
+from src.models import UserCreate, UserAuth
+from src.services import user_service, auth_service
 
 router = APIRouter(tags=["auth"], prefix="/v1/auth")
 
@@ -17,7 +17,7 @@ async def signup(body: UserCreate, response: Response):
         raise HTTPException(status_code=400, detail="User already exists")
     
     user = await user_service.create(body.email, body.name, bcrypt.hash(body.password))
-    token = await RefreshToken.generate(user.id)
+    token = await auth_service.generate(user.id)
     response.set_cookie("refresh_token", token.id, httponly=True)
 
     return {"token": user.generate_token()}
@@ -33,7 +33,7 @@ async def login(body: UserAuth, response: Response):
     if not bcrypt.verify(body.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid password")
     
-    token = await RefreshToken.generate(user.id)
+    token = await auth_service.generate(user.id)
     response.set_cookie("refresh_token", token.id, httponly=True)
     
     return {"token": user.generate_token()}
@@ -42,7 +42,7 @@ async def login(body: UserAuth, response: Response):
 @router.post("/exchange")
 async def exchange(refresh_token: Annotated[str, Cookie] = Cookie()):
     """Exchange a refresh token for a new access token"""
-    old_token = await RefreshToken.get_by_token(refresh_token)
+    old_token = await auth_service.get_by_token(refresh_token)
     if not old_token:
         raise HTTPException(status_code=400, detail="Invalid token")
     
