@@ -2,20 +2,8 @@ from datetime import datetime
 from typing import Optional
 
 from beanie import Document, PydanticObjectId
-from pydantic import BaseModel
 
-
-class PlantCreate(BaseModel):
-    name: str
-    code: str
-
-
-class PlantStatistics(BaseModel):
-    temperature: Optional[str] = None
-    humidity: Optional[str] = None
-    soil_moisture: Optional[str] = None
-    light_level: Optional[str] = None
-
+from src.schemas.plant import PlantCreate, PlantStatistics
 
 class Plant(Document):
     name: str

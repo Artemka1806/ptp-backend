@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Cookie, HTTPException, Response
 from passlib.hash import bcrypt
 
-from src.models import UserCreate, UserAuth
+from src.schemas import UserAuth, UserCreate
 from src.services import user_service, auth_service
 
 router = APIRouter(tags=["auth"], prefix="/v1/auth")

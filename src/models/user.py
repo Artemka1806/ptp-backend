@@ -1,23 +1,11 @@
 from datetime import datetime, timedelta
 
 from beanie import Document, Indexed
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr
 from pydantic.fields import Field
 import jwt
 
 from src.utils import settings
-
-
-class UserCreate(BaseModel):
-    name: str
-    email: EmailStr
-    password: str
-
-
-class UserAuth(BaseModel):
-    email: EmailStr
-    password: str
-
 
 class User(Document):
     email: Indexed(EmailStr, unique=True)  # type: ignore[valid-type]
@@ -51,7 +39,12 @@ class User(Document):
 
     def generate_token(self):
         return jwt.encode(
-            {"email": self.email, "is_active": self.is_active, "is_superuser": self.is_superuser, "exp": datetime.utcnow() + timedelta(seconds=settings.JWT_EXPIRATION)},
+            {
+                "email": self.email,
+                "is_active": self.is_active,
+                "is_superuser": self.is_superuser,
+                "exp": datetime.utcnow() + timedelta(seconds=settings.JWT_EXPIRATION)
+            },
             settings.JWT_SECRET,
             algorithm="HS256"
         )

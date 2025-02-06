@@ -1,4 +1,5 @@
-from src.models import Plant, PlantCreate, PlantStatistics, User
+from src.models import Plant, User
+from src.schemas.plant import PlantCreate, PlantStatistics
 
 async def create(body: PlantCreate, user: User):
     """Create a new plant"""
