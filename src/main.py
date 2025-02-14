@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Pet The Plant API", lifespan=lifespan)
 app.add_middleware(
 	CORSMiddleware,
-	allow_origins=["*"],
+	allow_origins=["http://localhost:5173", "https://app.ptp.artemka1806.xyz"],
 	allow_credentials=True,
 	allow_methods=["*"],
 	allow_headers=["*"],
