@@ -44,7 +44,8 @@ async def login(body: UserAuth, response: Response):
         value=token.id,
         httponly=True,
         samesite="None",
-        secure=True
+        secure=True,
+        max_age=30*24*60*60
     )
     return {"token": user.generate_token()}
 
