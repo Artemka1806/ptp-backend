@@ -45,7 +45,7 @@ async def login(body: UserAuth, response: Response):
         httponly=True,
         samesite="None",
         secure=True,
-        max_age=30*24*60*60
+        expires=30*24*60*60
     )
     return {"token": user.generate_token()}
 
