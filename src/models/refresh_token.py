@@ -40,6 +40,10 @@ class RefreshToken(Document):
                 expires_at=datetime.utcnow() + timedelta(days=30)
             )
         )
+    
+    @classmethod
+    async def delete(cls, token: str):
+        return await cls.delete_one({"_id": PydanticObjectId(token)})
 
     class Settings:
         name = "refresh_tokens"

@@ -9,3 +9,8 @@ async def generate(user_id: int):
 async def get_by_token(token: str):
     """Get a refresh token by its value"""
     return await RefreshToken.get_by_token(token)
+
+
+async def delete(token: str):
+    """Delete a refresh token by its value"""
+    await RefreshToken.delete(token)

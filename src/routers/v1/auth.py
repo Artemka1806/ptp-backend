@@ -65,3 +65,25 @@ async def exchange(refresh_token: Optional[str] = Cookie(None)):
         raise HTTPException(status_code=400, detail="User not found")
     
     return {"token": user.generate_token()}
+
+
+@router.post("/logout")
+async def logout(
+    response: Response,
+    refresh_token: Optional[str] = Cookie(None)
+):
+    """Log out the current user by invalidating their refresh token"""
+    # Delete the refresh token from the database if it exists
+    if refresh_token:
+        await auth_service.delete_token(refresh_token)
+    
+    # Clear the refresh token cookie
+    response.delete_cookie(
+        key="refresh_token",
+        path="/",
+        httponly=True,
+        samesite="None",
+        secure=True
+    )
+    
+    return {"message": "Logged out successfully"}
