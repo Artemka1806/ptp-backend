@@ -23,3 +23,9 @@ async def get_plant_by_code(code: str):
 async def update_plant_by_code(code: str, body: PlantStatistics):
     """Update a plant's statistics by its code"""
     return await plant_service.update_by_code(code, body)
+
+
+@router.delete("/{code}")
+async def delete_plant_by_code(code: str):
+    """Delete a plant by its code"""
+    return await plant_service.delete_by_code(code)

@@ -20,3 +20,12 @@ async def update_by_code(code: str, body: PlantStatistics):
     if not plant:
         return None
     return await plant.update_statistics(body)
+
+
+async def delete_by_code(code: str):
+    """Delete a plant by its code"""
+    plant = await Plant.get_by_code(code)
+    if not plant:
+        return None
+    await plant.delete()
+    return plant.dump()
