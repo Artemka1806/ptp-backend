@@ -73,11 +73,9 @@ async def logout(
     refresh_token: Optional[str] = Cookie(None)
 ):
     """Log out the current user by invalidating their refresh token"""
-    # Delete the refresh token from the database if it exists
     if refresh_token:
         await auth_service.delete(refresh_token)
     
-    # Clear the refresh token cookie
     response.delete_cookie(
         key="refresh_token",
         path="/",

@@ -43,7 +43,7 @@ class RefreshToken(Document):
     
     @classmethod
     async def delete(cls, token: str):
-        return await cls.delete_one({"_id": PydanticObjectId(token)})
+        return await cls.find_one({"_id": PydanticObjectId(token)}).delete()
 
     class Settings:
         name = "refresh_tokens"
