@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from beanie import Document, PydanticObjectId
+from beanie.operators import and_
 
 from src.schemas.plant import PlantCreate, PlantStatistics
 
@@ -28,12 +29,9 @@ class Plant(Document):
     
     @classmethod
     async def get_by_code_and_owner(cls, code: str, owner_id: PydanticObjectId):
-        return await cls.find_one((cls.code == code) & (cls.owner_id == owner_id))
+        return await cls.find_one(and_(cls.code == code, cls.owner_id == owner_id))
     
-    @classmethod
-    async def get_by_code_and_owner(cls, code: str, owner_id: PydanticObjectId):
-        return await cls.find_one((cls.code == code) & (cls.owner_id == owner_id))
-    
+
     async def update_statistics(self, statistics: PlantStatistics):
         self.statistics = statistics
         await self.save()
