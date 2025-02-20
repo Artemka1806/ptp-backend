@@ -21,8 +21,8 @@ async def get_plant_by_code(code: str, user: User = Depends(current_user)):
 
 @router.put("/{code}")
 async def update_plant_by_code(code: str, body: PlantStatistics):
-    """Update a plant's statistics by its code"""
-    return await plant_service.update_by_code(code, body)
+    """Update all plants with a matching code"""
+    return await plant_service.update_all_by_code(code, body)
 
 
 @router.delete("/{code}")

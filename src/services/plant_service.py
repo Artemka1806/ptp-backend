@@ -30,6 +30,20 @@ async def update_by_code(code: str, body: PlantStatistics):
     return await plant.update_statistics(body)
 
 
+async def update_all_by_code(code: str, body: PlantStatistics):
+    """Update all plants with a matching code"""
+    plants = await Plant.find(Plant.code == code).to_list()
+    if not plants:
+        return None
+    
+    updated_plants = []
+    for plant in plants:
+        updated_plant = await plant.update_statistics(body)
+        updated_plants.append(updated_plant)
+        
+    return updated_plants
+
+
 async def delete_by_code(code: str):
     """Delete a plant by its code"""
     plant = await Plant.get_by_code(code)
