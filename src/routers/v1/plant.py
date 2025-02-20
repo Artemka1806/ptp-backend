@@ -14,9 +14,9 @@ async def create_plant(body: PlantCreate, user: User = Depends(current_user)):
 
 
 @router.get("/{code}")
-async def get_plant_by_code(code: str):
+async def get_plant_by_code(code: str, user: User = Depends(current_user)):
     """Get a plant by its code"""
-    return await plant_service.get_by_code(code)
+    return await plant_service.get_by_code_and_owner(code, user)
 
 
 @router.put("/{code}")

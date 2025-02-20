@@ -14,6 +14,14 @@ async def get_by_code(code: str):
     return plant.dump()
 
 
+async def get_by_code_and_owner(code: str, user: User):
+    """Get a plant by its code and user"""
+    plant = await Plant.get_by_code_and_owner(code, user.id)
+    if not plant:
+        return None
+    return plant.dump()
+
+
 async def update_by_code(code: str, body: PlantStatistics):
     """Update a plant's statistics by its code"""
     plant = await Plant.get_by_code(code)
