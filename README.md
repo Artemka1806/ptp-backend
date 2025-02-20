@@ -68,16 +68,6 @@ After starting the server, visit:
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
 
-## Project Structure
-```
-app/
-├── api/         # API endpoints
-├── core/        # Core functionality
-├── models/      # Database models
-├── services/    # Business logic
-└── main.py      # Application entry point
-```
-
 ## Contributing
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
