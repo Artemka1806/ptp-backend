@@ -26,6 +26,6 @@ async def update_plant_by_code(code: str, body: PlantStatistics):
 
 
 @router.delete("/{code}")
-async def delete_plant_by_code(code: str):
+async def delete_plant_by_code(code: str, user: User = Depends(current_user)):
     """Delete a plant by its code"""
-    return await plant_service.delete_by_code(code)
+    return await plant_service.delete_by_code_and_owner(code, user)

@@ -30,6 +30,10 @@ class Plant(Document):
     async def get_by_code_and_owner(cls, code: str, owner_id: PydanticObjectId):
         return await cls.find_one((cls.code == code) & (cls.owner_id == owner_id))
     
+    @classmethod
+    async def get_by_code_and_owner(cls, code: str, owner_id: PydanticObjectId):
+        return await cls.find_one((cls.code == code) & (cls.owner_id == owner_id))
+    
     async def update_statistics(self, statistics: PlantStatistics):
         self.statistics = statistics
         await self.save()
