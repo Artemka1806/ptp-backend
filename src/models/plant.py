@@ -4,6 +4,7 @@ from typing import Optional
 from beanie import Document, PydanticObjectId
 
 from src.schemas.plant import PlantCreate, PlantStatistics
+from src.models.plant_statistics import PlantHistoricalStatistics
 
 class Plant(Document):
     name: str
@@ -34,6 +35,7 @@ class Plant(Document):
     async def update_statistics(self, statistics: PlantStatistics):
         self.statistics = statistics
         await self.save()
+        await PlantHistoricalStatistics.create_if_needed(self.id, self.owner_id, statistics)
         return self.dump()
 
     def dump(self):
