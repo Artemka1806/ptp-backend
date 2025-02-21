@@ -35,7 +35,7 @@ class Plant(Document):
     async def update_statistics(self, statistics: PlantStatistics):
         self.statistics = statistics
         await self.save()
-        await PlantHistoricalStatistics.create_if_needed(self.id, self.owner_id, statistics)
+        await PlantHistoricalStatistics.create_or_update(self.id, self.owner_id, statistics)
         return self.dump()
 
     def dump(self):
