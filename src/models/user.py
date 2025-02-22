@@ -3,6 +3,7 @@ from enum import Enum
 from beanie import Document, Indexed
 from pydantic import EmailStr, Field, validator
 from typing import Optional
+import jwt
 
 from src.utils import settings
 
