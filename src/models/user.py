@@ -58,6 +58,22 @@ class User(Document):
         except jwt.InvalidTokenError:
             return None
         return await cls.find_one(cls.email == data["email"])
+
+    async def delete_user(self):
+        """Delete the user and all related data"""
+        from src.models import Plant, RefreshToken, PlantHistoricalStatistics
+        
+        plants = await Plant.find(Plant.owner_id == self.id).to_list()
+        for plant in plants:
+            await PlantHistoricalStatistics.find(
+                PlantHistoricalStatistics.plant_id == plant.id
+            ).delete()
+            await plant.delete()
+        
+        await RefreshToken.find(RefreshToken.user_id == self.id).delete()
+        
+        await self.delete()
+        return True
     
     class Settings:
         name = "users"

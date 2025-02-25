@@ -1,6 +1,6 @@
 from asyncio import sleep as async_sleep
 
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect, WebSocketException
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect, WebSocketException, HTTPException
 from fastapi.encoders import jsonable_encoder
 
 from src.models import User
@@ -41,3 +41,16 @@ async def get_user_plants_ws(websocket: WebSocket):
         pass
     finally:
         await websocket.close()
+
+
+@router.delete("/me")
+async def delete_user(user: User = Depends(current_user)):
+    """Delete the current user's account"""
+    try:
+        await user_service.delete(user)
+        return {"message": "User deleted successfully"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to delete user: {str(e)}"
+        )

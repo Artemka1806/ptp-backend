@@ -9,6 +9,11 @@ async def create(email: str, name: str, hashed_password: str):
     return await User.create(email, name, hashed_password)
 
 
+async def delete(user: User):
+    """Delete a user and all their data"""
+    return await user.delete_user()
+
+
 async def get_by_id(id: int):
     """Get a user by their ID"""
     return await User.get_by_id(id)
