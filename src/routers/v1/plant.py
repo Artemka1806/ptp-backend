@@ -1,5 +1,6 @@
 from beanie import PydanticObjectId
 from fastapi import APIRouter, Depends, Query
+from datetime import datetime, timedelta
 
 from src.models import PlantCreate, PlantStatistics, User
 from src.models.plant_statistics import PlantHistoricalStatistics
@@ -65,6 +66,10 @@ async def get_plant_advice(code: str, user: User = Depends(current_user)):
     plant = await plant_service.get_by_code_and_owner(code, user)
     if not plant:
         return {"advice": ""}
+    
+    if plant.get("advice_updated_at") and plant["advice_updated_at"] > datetime.utcnow() - timedelta(days=1):
+        return {"advice": plant["advice"]}
+    
     data = ai_service.get_plant_care_advice(plant["type"], plant["statistics"])
     await plant_service.update_advice_by_code_and_owner(code, data["advice"], user)
-    return {"advice": data["advice"]} 
+    return {"advice": data["advice"]}
