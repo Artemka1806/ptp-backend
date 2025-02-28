@@ -13,7 +13,7 @@ def get_plant_care_advice(plant_name, conditions):
         messages=[
             {
                 "role": "developer", 
-                "content": "You are an expert in plant care. Provide helpful plant care advice based on the information provided. The answer should be short and clear. Answer in English."
+                "content": "You are an expert in plant care. Provide helpful plant care advice based on the information provided. The answer should be short and clear. Answer in Ukrainian."
             },
             {
                 "role": "user", 
