@@ -73,3 +73,15 @@ async def delete_by_code_and_owner(code: str, user: User):
         return None
     await plant.delete()
     return plant.dump()
+
+
+async def delete_by_owner_id(owner_id: str):
+    """Delete all plants owned by a specific user"""
+    plants = await Plant.find(Plant.owner_id == owner_id).to_list()
+    if not plants:
+        return False
+        
+    for plant in plants:
+        await plant.delete()
+        
+    return True
