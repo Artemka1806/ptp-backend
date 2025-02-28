@@ -30,6 +30,16 @@ async def update_by_code(code: str, body: PlantStatistics):
     return await plant.update_statistics(body)
 
 
+async def update_advice_by_code_and_owner(code: str, advice: str, user: User):
+    """Update a plant's advice by its code and user"""
+    plant = await Plant.get_by_code_and_owner(code, user.id)
+    if not plant:
+        return None
+    plant.advice = advice
+    await plant.save()
+    return plant.dump()
+
+
 async def update_all_by_code(code: str, body: PlantStatistics):
     """Update all plants with a matching code"""
     plants = await Plant.find(Plant.code == code).to_list()

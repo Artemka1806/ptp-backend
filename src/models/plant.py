@@ -12,6 +12,7 @@ class Plant(Document):
     code: str
     owner_id: PydanticObjectId
     statistics: Optional[PlantStatistics] = None
+    advice: Optional[str] = None
     created_at: datetime = datetime.utcnow()
 
     @classmethod
