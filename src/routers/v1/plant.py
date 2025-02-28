@@ -57,3 +57,5 @@ async def get_user_plants_history(
 ):
     """Get historical statistics for all user's plants"""
     return await PlantHistoricalStatistics.get_by_user(user.id, limit)
+
+
