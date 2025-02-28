@@ -65,4 +65,4 @@ async def get_plant_advice(code: str, user: User = Depends(current_user)):
     plant = await plant_service.get_by_code_and_owner(code, user)
     if not plant:
         return {"advice": ""}
-    return await ai_service.get_plant_care_advice(plant.type, plant.statistics)
+    return await ai_service.get_plant_care_advice(plant["type"], plant["statistics"])
