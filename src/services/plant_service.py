@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.models import Plant, User
 from src.schemas.plant import PlantCreate, PlantStatistics
 
@@ -36,6 +38,7 @@ async def update_advice_by_code_and_owner(code: str, advice: str, user: User):
     if not plant:
         return None
     plant.advice = advice
+    plant.advice_updated_at = datetime.utcnow()
     await plant.save()
     return plant.dump()
 
