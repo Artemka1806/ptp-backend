@@ -2,7 +2,7 @@ from json import loads
 
 from openai import OpenAI
 
-from utils.settings import settings
+from src.utils.settings import settings
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
