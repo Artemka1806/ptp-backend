@@ -64,7 +64,7 @@ async def get_user_plants_history(
 async def get_plant_advice(code: str, user: User = Depends(current_user)):
     """Get plant care advice based on the provided plant and conditions"""
     plant = await plant_service.get_by_code_and_owner(code, user)
-    if not plant:
+    if not plant or not plant.get("statistics"):
         return {"advice": ""}
     
     if plant.get("advice_updated_at") and plant["advice_updated_at"] > datetime.utcnow() - timedelta(days=1):
