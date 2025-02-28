@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Query
 
 from src.models import PlantCreate, PlantStatistics, User
 from src.models.plant_statistics import PlantHistoricalStatistics
-from src.services import plant_service
+from src.services import plant_service, ai_service
 from src.utils import current_user
 
 router = APIRouter(tags=["plant"], prefix="/v1/plant")
@@ -59,3 +59,10 @@ async def get_user_plants_history(
     return await PlantHistoricalStatistics.get_by_user(user.id, limit)
 
 
+@router.get("/{code}/advice")
+async def get_plant_advice(code: str, user: User = Depends(current_user)):
+    """Get plant care advice based on the provided plant and conditions"""
+    plant = await plant_service.get_by_code_and_owner(code, user)
+    if not plant:
+        return {"advice": ""}
+    return await ai_service.get_plant_care_advice(plant.type, plant.statistics)

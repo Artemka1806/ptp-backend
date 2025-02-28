@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 class PlantCreate(BaseModel):
     name: str
+    type: str
     code: str
 
 

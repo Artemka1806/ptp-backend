@@ -8,6 +8,7 @@ from src.models.plant_statistics import PlantHistoricalStatistics
 
 class Plant(Document):
     name: str
+    type: str
     code: str
     owner_id: PydanticObjectId
     statistics: Optional[PlantStatistics] = None
