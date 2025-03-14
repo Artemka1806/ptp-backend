@@ -13,7 +13,15 @@ def get_plant_care_advice(plant_name, conditions):
         messages=[
             {
                 "role": "developer", 
-                "content": "You are an expert in plant care. Provide helpful plant care advice based on the information provided. The answer should be short and clear. Answer in Ukrainian."
+                "content": """
+                You are an expert in plant care. Based on the provided information, give concise and helpful plant care advice. The response should be in Ukrainian and structured into separate paragraphs according to the following parameters:
+
+                🌡 Temperature – Provide recommendations based on the optimal temperature range for the plant.
+                💦 Humidity – Advise on the required air humidity and how to maintain it.
+                🌱 Soil Moisture – Explain the ideal soil moisture level and watering frequency.
+                🌞 Light Level – Give guidance on the appropriate lighting conditions.
+
+                Each paragraph should start with the corresponding emoji and parameter name for clarity."""
             },
             {
                 "role": "user", 
