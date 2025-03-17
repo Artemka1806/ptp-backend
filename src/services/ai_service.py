@@ -7,7 +7,7 @@ from src.utils.settings import settings
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 def get_plant_care_advice(plant_name, conditions):
-    """Get plant care advice based on the provided plant and conditions"""
+    """Дає рекомендації щодо догляду за рослиною."""
     response = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         messages=[
@@ -40,6 +40,68 @@ def get_plant_care_advice(plant_name, conditions):
                     "properties": {
                         "advice": {
                             "description": "Expert advice on plant care based on the provided conditions",
+                            "type": "string"
+                        }
+                    },
+                    "required": ["advice"],
+                    "additionalProperties": False
+                }
+            }
+        }
+    )
+    
+    return loads(response.choices[0].message.content)
+
+def analyze_plant_statistics(plant_name, statistics_data):
+    """Аналізує статистику за 7 днів і генерує рекомендації."""
+    
+    # Формування запиту до GPT із реальними значеннями за 7 днів
+    formatted_data = "\n".join(
+        [
+            f"{d['date']}: Temperature: {d['statistics']['temperature']}°C, "
+            f"Humidity: {d['statistics']['humidity']}%, Soil Moisture: {d['statistics']['soil_moisture']}%, "
+            f"Light Level: {d['statistics']['light_level']}"
+            for d in statistics_data
+        ]
+    )
+    
+    response = client.chat.completions.create(
+        model="gpt-4o-mini-2024-07-18",
+        messages=[
+            {
+                "role": "system", 
+                "content": """
+                You are a plant care expert. Analyze the given 7-day statistics and provide clear, concise, and actionable care recommendations in **Ukrainian**.
+                
+                Your response should include:
+                - 🌡 **Temperature**: Identify patterns and suggest improvements.
+                - 💦 **Humidity**: Determine if adjustments are needed.
+                - 🌱 **Soil Moisture**: Recommend watering frequency.
+                - 🌞 **Light Level**: Assess if the plant is getting sufficient light.
+                - ⚠️ **Warnings**: Highlight any critical issues that require immediate attention.
+                
+                Do not assume optimal ranges; determine them based on the provided data and general plant care knowledge. Format your response into short, distinct paragraphs with emojis.
+                """
+            },
+            {
+                "role": "user", 
+                "content": f"""
+                Plant: {plant_name}
+                
+                Data for the last 7 days:
+                {formatted_data}
+                """
+            }
+        ],
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": "plant_statistics_analysis",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "advice": {
+                            "description": "Аналіз стану рослини на основі даних за останні 7 днів",
                             "type": "string"
                         }
                     },

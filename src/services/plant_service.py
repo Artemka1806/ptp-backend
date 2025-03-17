@@ -43,6 +43,18 @@ async def update_advice_by_code_and_owner(code: str, advice: str, user: User):
     return plant.dump()
 
 
+async def update_weekly_advice_by_code_and_owner(code: str, advice: str, user: User):
+    """Update the weekly advice for a specific plant"""
+    plant = await Plant.find_one({"code": code, "owner": user.id})
+    if not plant:
+        return None
+    
+    plant.weekly_advice = advice
+    plant.weekly_advice_updated_at = datetime.utcnow()
+    await plant.save()
+    return plant
+
+
 async def update_all_by_code(code: str, body: PlantStatistics):
     """Update all plants with a matching code"""
     plants = await Plant.find(Plant.code == code).to_list()
