@@ -45,7 +45,7 @@ async def update_advice_by_code_and_owner(code: str, advice: str, user: User):
 
 async def update_weekly_advice_by_code_and_owner(code: str, advice: str, user: User):
     """Update the weekly advice for a specific plant"""
-    plant = await Plant.find_one({"code": code, "owner": user.id})
+    plant = await Plant.get_by_code_and_owner(code, user.id)
     if not plant:
         return None
     
