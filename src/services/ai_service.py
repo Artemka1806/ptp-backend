@@ -52,15 +52,16 @@ def get_plant_care_advice(plant_name, conditions):
     
     return loads(response.choices[0].message.content)
 
+
 def analyze_plant_statistics(plant_name, statistics_data):
     """Аналізує статистику за 7 днів і генерує рекомендації."""
     
     # Формування запиту до GPT із реальними значеннями за 7 днів
     formatted_data = "\n".join(
         [
-            f"{d['date']}: Temperature: {d['statistics']['temperature']}°C, "
-            f"Humidity: {d['statistics']['humidity']}%, Soil Moisture: {d['statistics']['soil_moisture']}%, "
-            f"Light Level: {d['statistics']['light_level']}"
+            f"{d.date.strftime('%Y-%m-%d')}: Temperature: {d.statistics.temperature}°C, "
+            f"Humidity: {d.statistics.humidity}%, Soil Moisture: {d.statistics.soil_moisture}%, "
+            f"Light Level: {d.statistics.light_level}"
             for d in statistics_data
         ]
     )
