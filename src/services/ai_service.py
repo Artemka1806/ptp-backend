@@ -24,6 +24,8 @@ def get_plant_care_advice(plant_name, conditions):
                 🌞 <important>Light Level</important> – Suggest the best lighting conditions for the plant.
 
                 Avoid unnecessary details—focus only on <important>clear, actionable recommendations</important>.
+                
+                Use HTML <b> tags to highlight key information, critical values, and important recommendations in the output. For example: ideal temperature range of <b>18-22°C</b>, <b>reduce watering</b> during winter, etc.
                 """
             },
             {
@@ -72,16 +74,18 @@ def analyze_plant_statistics(plant_name, statistics_data):
             {
                 "role": "system", 
                 "content": """
-                You are a plant care expert. Analyze the given 7-day statistics and provide clear, concise, and actionable care recommendations in **Ukrainian**.
+                You are a plant care expert. Analyze the given 7-day statistics and provide clear, concise, and actionable care recommendations in <important>Ukrainian</important>.
                 
                 Your response should include:
-                - 🌡 **Temperature**: Identify patterns and suggest improvements.
-                - 💦 **Humidity**: Determine if adjustments are needed.
-                - 🌱 **Soil Moisture**: Recommend watering frequency.
-                - 🌞 **Light Level**: Assess if the plant is getting sufficient light.
-                - ⚠️ **Warnings**: Highlight any critical issues that require immediate attention.
+                - 🌡 <important>Temperature</important>: Identify patterns and suggest improvements.
+                - 💦 <important>Humidity</important>: Determine if adjustments are needed.
+                - 🌱 <important>Soil Moisture</important>: Recommend watering frequency.
+                - 🌞 <important>Light Level</important>: Assess if the plant is getting sufficient light.
+                - ⚠️ <important>Warnings</important>: Highlight any critical issues that require immediate attention.
                 
                 Do not assume optimal ranges; determine them based on the provided data and general plant care knowledge. Format your response into short, distinct paragraphs with emojis.
+                
+                Use HTML <b> tags to highlight key information, critical values, and important recommendations in your output. For example: temperature is <b>too low</b>, increase watering to <b>twice per week</b>, etc.
                 """
             },
             {
