@@ -98,7 +98,7 @@ async def get_plant_weekly_advice(id: str, user: User = Depends(current_user)):
         return {"advice": ""}
     
     data = ai_service.analyze_plant_statistics(plant.type, historical_stats)
-    plant.advice = data["advice"]
+    plant.weekly_advice = data["advice"]
     plant.weekly_advice_updated_at = datetime.utcnow()
     await plant.save()
     return {"advice": data["advice"]}
