@@ -71,8 +71,8 @@ async def get_plant_advice(id: str, user: User = Depends(current_user)):
         return {"advice": plant["advice"]}
     
     data = ai_service.get_plant_care_advice(plant["type"], plant["statistics"])
-    plant.advice = data["advice"]
-    plant.advice_updated_at = datetime.utcnow()
+    plant["advice"] = data["advice"]
+    plant["advice_updated_at"] = datetime.utcnow()
     await plant_service.save(plant)
     return {"advice": data["advice"]}
 
@@ -98,7 +98,7 @@ async def get_plant_weekly_advice(id: str, user: User = Depends(current_user)):
         return {"advice": ""}
     
     data = ai_service.analyze_plant_statistics(plant["type"], historical_stats)
-    plant.weekly_advice = data["advice"]
-    plant.weekly_advice_updated_at = datetime.utcnow()
+    plant["advice"] = data["advice"]
+    plant["weekly_advice_updated_at"] = datetime.utcnow()
     await plant_service.save(plant)
     return {"advice": data["advice"]}
