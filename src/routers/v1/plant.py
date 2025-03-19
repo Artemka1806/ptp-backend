@@ -67,7 +67,7 @@ async def get_plant_advice(id: str, user: User = Depends(current_user)):
     if not plant or str(plant.owner_id) != str(user.id) or not plant.statistics:
         return {"advice": ""}
     
-    if hasattr(plant, 'advice_updated_at') and plant.advice_updated_at > datetime.utcnow() - timedelta(days=1):
+    if hasattr(plant, 'advice_updated_at') and plant.advice_updated_at and plant.advice_updated_at > datetime.now(datetime.timezone.utc) - timedelta(days=1):
         return {"advice": plant.advice}
     
     data = ai_service.get_plant_care_advice(plant.type, plant.statistics)
@@ -85,7 +85,7 @@ async def get_plant_weekly_advice(id: str, user: User = Depends(current_user)):
     if not plant or str(plant.owner_id) != str(user.id):
         return {"advice": ""}
     
-    if hasattr(plant, 'weekly_advice_updated_at') and plant.weekly_advice_updated_at > datetime.utcnow() - timedelta(days=1):
+    if hasattr(plant, 'weekly_advice_updated_at') and plant.weekly_advice_updated_at and plant.weekly_advice_updated_at > datetime.utcnow() - timedelta(days=1):
         return {"advice": getattr(plant, 'weekly_advice', "")}
 
     historical_stats = await PlantHistoricalStatistics.get_by_plant(
