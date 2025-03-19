@@ -64,13 +64,13 @@ async def get_plant_advice(id: str, user: User = Depends(current_user)):
     """Get plant care advice based on the provided plant and conditions"""
     plant = await plant_service.get_by_id(id)
 
-    if not plant or str(plant.get("owner_id")) != str(user.id) or not plant.get("statistics"):
+    if not plant or str(plant.owner_id) != str(user.id) or not plant.statistics:
         return {"advice": ""}
     
-    if plant.get("advice_updated_at") and plant["advice_updated_at"] > datetime.utcnow() - timedelta(days=1):
-        return {"advice": plant["advice"]}
+    if hasattr(plant, 'advice_updated_at') and plant.advice_updated_at > datetime.utcnow() - timedelta(days=1):
+        return {"advice": plant.advice}
     
-    data = ai_service.get_plant_care_advice(plant["type"], plant["statistics"])
+    data = ai_service.get_plant_care_advice(plant.type, plant.statistics)
     plant.advice = data["advice"]
     plant.advice_updated_at = datetime.utcnow()
     await plant.save()
@@ -82,11 +82,11 @@ async def get_plant_weekly_advice(id: str, user: User = Depends(current_user)):
     """Get plant care advice based on the last 7 days of statistics"""
     plant = await plant_service.get_by_id(id)
     
-    if not plant or str(plant.get("owner_id")) != str(user.id):
+    if not plant or str(plant.owner_id) != str(user.id):
         return {"advice": ""}
     
-    if plant.get("weekly_advice_updated_at") and plant["weekly_advice_updated_at"] > datetime.utcnow() - timedelta(days=1):
-        return {"advice": plant.get("weekly_advice", "")}
+    if hasattr(plant, 'weekly_advice_updated_at') and plant.weekly_advice_updated_at > datetime.utcnow() - timedelta(days=1):
+        return {"advice": getattr(plant, 'weekly_advice', "")}
 
     historical_stats = await PlantHistoricalStatistics.get_by_plant(
         PydanticObjectId(id),
@@ -97,7 +97,7 @@ async def get_plant_weekly_advice(id: str, user: User = Depends(current_user)):
     if not historical_stats:
         return {"advice": ""}
     
-    data = ai_service.analyze_plant_statistics(plant["type"], historical_stats)
+    data = ai_service.analyze_plant_statistics(plant.type, historical_stats)
     plant.advice = data["advice"]
     plant.weekly_advice_updated_at = datetime.utcnow()
     await plant.save()
