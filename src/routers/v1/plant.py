@@ -59,33 +59,37 @@ async def get_user_plants_history(
     return await PlantHistoricalStatistics.get_by_user(user.id, limit)
 
 
-@router.get("/{code}/advice")
-async def get_plant_advice(code: str, user: User = Depends(current_user)):
+@router.get("/{id}/advice")
+async def get_plant_advice(id: str, user: User = Depends(current_user)):
     """Get plant care advice based on the provided plant and conditions"""
-    plant = await plant_service.get_by_code_and_owner(code, user)
-    if not plant or not plant.get("statistics"):
+    plant = await plant_service.get_by_id(id)
+
+    if not plant or str(plant.get("owner_id")) != str(user.id) or not plant.get("statistics"):
         return {"advice": ""}
     
     if plant.get("advice_updated_at") and plant["advice_updated_at"] > datetime.utcnow() - timedelta(days=1):
         return {"advice": plant["advice"]}
     
     data = ai_service.get_plant_care_advice(plant["type"], plant["statistics"])
-    await plant_service.update_advice_by_code_and_owner(code, data["advice"], user)
+    plant.advice = data["advice"]
+    plant.advice_updated_at = datetime.utcnow()
+    await plant_service.save(plant)
     return {"advice": data["advice"]}
 
 
-@router.get("/{code}/weekly-advice")
-async def get_plant_weekly_advice(code: str, user: User = Depends(current_user)):
+@router.get("/{id}/weekly-advice")
+async def get_plant_weekly_advice(id: str, user: User = Depends(current_user)):
     """Get plant care advice based on the last 7 days of statistics"""
-    plant = await plant_service.get_by_code_and_owner(code, user)
-    if not plant:
+    plant = await plant_service.get_by_id(id)
+    
+    if not plant or str(plant.get("owner_id")) != str(user.id):
         return {"advice": ""}
     
     if plant.get("weekly_advice_updated_at") and plant["weekly_advice_updated_at"] > datetime.utcnow() - timedelta(days=1):
         return {"advice": plant.get("weekly_advice", "")}
 
     historical_stats = await PlantHistoricalStatistics.get_by_plant(
-        PydanticObjectId(plant["id"]), 
+        PydanticObjectId(id),
         PydanticObjectId(user.id), 
         limit=7
     )
@@ -94,5 +98,7 @@ async def get_plant_weekly_advice(code: str, user: User = Depends(current_user))
         return {"advice": ""}
     
     data = ai_service.analyze_plant_statistics(plant["type"], historical_stats)
-    await plant_service.update_weekly_advice_by_code_and_owner(code, data["advice"], user)
+    plant.weekly_advice = data["advice"]
+    plant.weekly_advice_updated_at = datetime.utcnow()
+    await plant_service.save(plant)
     return {"advice": data["advice"]}
