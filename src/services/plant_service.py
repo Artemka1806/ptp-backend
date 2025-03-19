@@ -13,7 +13,7 @@ async def get_by_id(id: str):
     plant = await Plant.get_by_id(id)
     if not plant:
         return None
-    return plant.dump()
+    return plant
 
 
 async def get_by_code(code: str):
