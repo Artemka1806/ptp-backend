@@ -33,18 +33,18 @@ async def delete_plant_by_id(id: str, user: User = Depends(current_user)):
     return await plant_service.delete_by_id(id)
 
 
-@router.get("/{code}/history")
+@router.get("/{id}/history")
 async def get_plant_history(
-    code: str, 
+    id: str, 
     limit: int = Query(default=100, le=1000), 
     user: User = Depends(current_user)
 ):
     """Get historical statistics for a specific plant"""
-    plant = await plant_service.get_by_code_and_owner(code, user)
+    plant = await plant_service.get_by_id(id)
     if not plant:
         return []
     return await PlantHistoricalStatistics.get_by_plant(
-        PydanticObjectId(plant["id"]), 
+        PydanticObjectId(plant.id), 
         PydanticObjectId(user.id), 
         limit
     )
