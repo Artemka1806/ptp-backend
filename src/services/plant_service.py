@@ -78,6 +78,15 @@ async def delete_by_code(code: str):
     return plant.dump()
 
 
+async def delete_by_id(id: str):
+    """Delete a plant by its id"""
+    plant = await Plant.get_by_id(id)
+    if not plant:
+        return None
+    await plant.delete()
+    return plant.dump()
+
+
 async def delete_by_code_and_owner(code: str, user: User):
     """Delete a plant by its code and user"""
     plant = await Plant.get_by_code_and_owner(code, user.id)

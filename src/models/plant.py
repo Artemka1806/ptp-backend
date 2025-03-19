@@ -25,6 +25,10 @@ class Plant(Document):
         return plant.dump()
 
     @classmethod
+    async def get_by_id(cls, plant_id: str):
+        return await cls.get(PydanticObjectId(plant_id))
+
+    @classmethod
     async def get_by_code(cls, code: str):
         return await cls.find_one(cls.code == code)
 
