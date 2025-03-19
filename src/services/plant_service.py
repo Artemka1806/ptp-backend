@@ -8,6 +8,14 @@ async def create(body: PlantCreate, user: User):
     return await Plant.create(body, user.id)
 
 
+async def get_by_id(id: str):
+    """Get a plant by its id"""
+    plant = await Plant.get_by_id(id)
+    if not plant:
+        return None
+    return plant.dump()
+
+
 async def get_by_code(code: str):
     """Get a plant by its code"""
     plant = await Plant.get_by_code(code)
