@@ -2,11 +2,13 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    MONGO_DB_URI: str = "mongodb://localhost:27017"
-    MONGO_DB_NAME: str = "db"
-    JWT_SECRET: str = "secret"
+    MONGO_DB_URI: str
+    MONGO_DB_NAME: str
+    JWT_SECRET: str
     JWT_EXPIRATION: int = 120
-    OPENAI_API_KEY: str = "sk-1234567890"
-
+    OPENAI_API_KEY: str
+    WEBPUSH_PUBLIC_KEY: str
+    WEBPUSH_PRIVATE_KEY: str
+    WEBPUSH_EMAIL: str
 
 settings = Settings()
